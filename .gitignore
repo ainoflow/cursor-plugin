@@ -1,0 +1,27 @@
+# Secrets and local credentials — never commit
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+secrets/
+credentials/
+*.secret
+*.token
+
+# Local / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.cache/

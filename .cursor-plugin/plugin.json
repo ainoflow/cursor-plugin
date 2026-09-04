@@ -1,0 +1,23 @@
+{
+  "name": "ainoflow",
+  "version": "0.1.0",
+  "description": "Ainoflow MCP: Memory, Files, Storage, and Inbox for Cursor / Grok Bot agents",
+  "author": {
+    "name": "Ainoflow"
+  },
+  "homepage": "https://www.ainoflow.io/docs/mcp",
+  "repository": "https://github.com/ainoflow/cursor-plugin",
+  "license": "MIT",
+  "keywords": ["ainoflow", "mcp", "memory", "files", "storage", "inbox"],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "AINOFLOW_API_KEY": {
+        "type": "string",
+        "title": "Ainoflow API key",
+        "description": "Bearer API key from the Ainoflow Dashboard. Used as Authorization: Bearer ${AINOFLOW_API_KEY} for the Memory, Files, Storage, and Inbox MCP servers."
+      }
+    },
+    "required": ["AINOFLOW_API_KEY"]
+  }
+}
