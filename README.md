@@ -77,6 +77,8 @@ Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketp
 - [ ] Local install connects all four MCP servers
 - [ ] Repository link and README are ready for marketplace review
 
+Cursor marketplace listing may later require a public GitHub repository. This repo stays private until there is an explicit greenlight to change visibility. Visibility is not part of the Phase 1 scaffold.
+
 ## Documentation
 
 Full MCP connection and configuration: [https://www.ainoflow.io/docs/mcp](https://www.ainoflow.io/docs/mcp)
