@@ -71,7 +71,7 @@ Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketp
 - [ ] Root `plugin.json` validates against [Agent Plugins 1.0.0](https://agent-plugins.org/schemas/1.0.0/plugin.schema.json)
 - [ ] `mcp.json` validates against [Agent Plugins MCP 1.0.0](https://agent-plugins.org/schemas/1.0.0/mcp.schema.json)
 - [ ] Four `streamable-http` servers are present and use `${AINOFLOW_API_KEY}` only
-- [ ] `.cursor-plugin/plugin.json` declares the `AINOFLOW_API_KEY` variable
+- [ ] `.cursor-plugin/plugin.json` declares the `AINOFLOW_API_KEY` variable and `"logo": "assets/logo.png"`
 - [ ] Four skills exist under `skills/*/SKILL.md` with name + when-to-use description
 - [ ] No API keys, tokens, `.env` files, or customer data in git
 - [ ] Local install connects all four MCP servers

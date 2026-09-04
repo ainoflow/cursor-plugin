@@ -9,6 +9,7 @@
   "repository": "https://github.com/ainoflow/cursor-plugin",
   "license": "MIT",
   "keywords": ["ainoflow", "mcp", "memory", "files", "storage", "inbox"],
+  "logo": "assets/logo.png",
   "variables": {
     "type": "object",
     "properties": {
