@@ -31,7 +31,7 @@ Then:
 2. Restart Cursor.
 3. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
 
-If Cursor opens an OAuth window, the Bearer header was not applied. See [Troubleshooting: Cursor shows OAuth](#troubleshooting-cursor-shows-oauth).
+If all four `ainoflow-*` servers fail or Cursor shows OAuth, see [Troubleshooting: 401 and Cursor OAuth](#troubleshooting-401-and-cursor-oauth). The plugin endpoints and `mcp.json` format are correct; a rejected or empty API key is the usual cause.
 
 ## Auth
 
@@ -50,17 +50,43 @@ Authorization: Bearer ${AINOFLOW_API_KEY}
 
 There is no root Agent Plugins `plugin.json` in v1, so this package is not advertised as a portable Agent Plugins auth setup.
 
-### Troubleshooting: Cursor shows OAuth
+### Troubleshooting: 401 and Cursor OAuth
 
-Ainoflow MCP is **Bearer API key only**. The public endpoints do not advertise OAuth (no OAuth discovery documents). If Cursor opens an OAuth flow, the `Authorization` header was missing or unresolved and Cursor is reacting to a 401 — not an Ainoflow OAuth login.
+Ainoflow MCP is **Bearer API key only**. The four plugin endpoints and the committed `mcp.json` (`Authorization: Bearer ${AINOFLOW_API_KEY}`) are correct. Breakage is: bad or empty key → HTTP 401 with an empty body and **no** `WWW-Authenticate` → Cursor already sent `Authorization`, OAuth fallback fails → all four `ainoflow-*` servers are marked failed, so tools never appear (no `memory_guide` or other tools). This is not Memory-specific.
 
-1. **Marketplace install:** set `AINOFLOW_API_KEY` under **Plugins → Configure**. The committed `mcp.json` uses `Authorization: Bearer ${AINOFLOW_API_KEY}` (a Cursor Plugin Variable).
-2. **Local folder / local marketplace:** Cursor often does **not** substitute plugin Variables. The header may stay the literal `${AINOFLOW_API_KEY}`, the server returns 401, and Cursor may show OAuth. For a local smoke-test, set the OS environment variable `AINOFLOW_API_KEY` and add the four servers to `~/.cursor/mcp.json` (Windows: `%USERPROFILE%\.cursor\mcp.json`) with `Authorization: Bearer ${env:AINOFLOW_API_KEY}`. Or confirm **MCP Logs** show a real token, not the literal `${AINOFLOW_API_KEY}`.
-3. **Debug:** Cursor **Output → MCP Logs**. Look for OAuth discovery, 401 responses, and unresolved placeholders.
-4. Do **not** add an OAuth `auth` block to this plugin’s `mcp.json`. Ainoflow does not use OAuth for Memory, Files, Storage, or Inbox.
-5. Never commit real keys, tokens, or a filled-in `mcp.json`.
+Cursor **Output → MCP Logs** typically shows:
 
-The plugin `mcp.json` in this repo stays `Bearer ${AINOFLOW_API_KEY}` for marketplace Variables. Do not switch the committed plugin to `${env:...}` only.
+- `OAuth fallback failed after MCP server returned 401 for configured Authorization header`
+- `HTTP 401 Unauthorized … while using configured Authorization header`
+
+The plugin sends the Dashboard API key from **Plugins → Configure**, not OAuth. Cursor’s `mcp_auth` / OAuth UI is useless here — Ainoflow does not offer OAuth for Memory, Files, Storage, or Inbox. Do **not** add an OAuth `auth` block to this plugin’s `mcp.json`.
+
+**Fix a first install (empty or wrong key)**
+
+1. Open **Plugins → ainoflow → Configure**.
+2. Paste the Dashboard API key only. Do **not** type `Bearer ` in front of it (that becomes `Bearer Bearer …` and 401s).
+3. Reload MCP servers or restart Cursor.
+4. Expect four green `ainoflow-*` entries in **Settings → MCP**.
+
+**If the key is set and you still get 401**
+
+The key was rejected (wrong value, leading/trailing whitespace, a `Bearer ` prefix, or not an MCP API key). Confirm outside Cursor with a JSON-RPC `initialize` (replace `YOUR_KEY`; never commit a real key):
+
+```bash
+curl -sS -X POST https://mcp.ainoflow.io/mcp/v1/memory \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"ainoflow-check","version":"0.1.0"}}}'
+```
+
+Expect a JSON-RPC `initialize` result, not HTTP 401.
+
+**Placeholders vs Variables**
+
+Marketplace install substitutes `${AINOFLOW_API_KEY}` from Plugins → Configure. If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, Variables were not applied (common on some local folder / local marketplace installs). For a local smoke-test only, set the OS env `AINOFLOW_API_KEY` and put the four URLs in `~/.cursor/mcp.json` (Windows: `%USERPROFILE%\.cursor\mcp.json`) with `Authorization: Bearer ${env:AINOFLOW_API_KEY}`. The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}` — do not switch it to `${env:...}` only.
+
+Never commit real keys, tokens, or a filled-in `mcp.json`.
 
 ## MCP endpoints
 
