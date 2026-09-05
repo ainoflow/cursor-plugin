@@ -31,6 +31,8 @@ Then:
 2. Restart Cursor.
 3. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
 
+If Cursor opens an OAuth window, the Bearer header was not applied. See [Troubleshooting: Cursor shows OAuth](#troubleshooting-cursor-shows-oauth).
+
 ## Auth
 
 Phase 1 auth is **Cursor Variables only**.
@@ -47,6 +49,18 @@ Authorization: Bearer ${AINOFLOW_API_KEY}
 - This repo only stores the `${AINOFLOW_API_KEY}` placeholder, declared in `.cursor-plugin/plugin.json` `variables`.
 
 There is no root Agent Plugins `plugin.json` in v1, so this package is not advertised as a portable Agent Plugins auth setup.
+
+### Troubleshooting: Cursor shows OAuth
+
+Ainoflow MCP is **Bearer API key only**. The public endpoints do not advertise OAuth (no OAuth discovery documents). If Cursor opens an OAuth flow, the `Authorization` header was missing or unresolved and Cursor is reacting to a 401 — not an Ainoflow OAuth login.
+
+1. **Marketplace install:** set `AINOFLOW_API_KEY` under **Plugins → Configure**. The committed `mcp.json` uses `Authorization: Bearer ${AINOFLOW_API_KEY}` (a Cursor Plugin Variable).
+2. **Local folder / local marketplace:** Cursor often does **not** substitute plugin Variables. The header may stay the literal `${AINOFLOW_API_KEY}`, the server returns 401, and Cursor may show OAuth. For a local smoke-test, set the OS environment variable `AINOFLOW_API_KEY` and add the four servers to `~/.cursor/mcp.json` (Windows: `%USERPROFILE%\.cursor\mcp.json`) with `Authorization: Bearer ${env:AINOFLOW_API_KEY}`. Or confirm **MCP Logs** show a real token, not the literal `${AINOFLOW_API_KEY}`.
+3. **Debug:** Cursor **Output → MCP Logs**. Look for OAuth discovery, 401 responses, and unresolved placeholders.
+4. Do **not** add an OAuth `auth` block to this plugin’s `mcp.json`. Ainoflow does not use OAuth for Memory, Files, Storage, or Inbox.
+5. Never commit real keys, tokens, or a filled-in `mcp.json`.
+
+The plugin `mcp.json` in this repo stays `Bearer ${AINOFLOW_API_KEY}` for marketplace Variables. Do not switch the committed plugin to `${env:...}` only.
 
 ## MCP endpoints
 
