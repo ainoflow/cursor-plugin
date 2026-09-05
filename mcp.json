@@ -1,29 +1,24 @@
 {
-  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
     "ainoflow-memory": {
-      "type": "streamable-http",
       "url": "https://mcp.ainoflow.io/mcp/v1/memory",
       "headers": {
         "Authorization": "Bearer ${AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-files": {
-      "type": "streamable-http",
       "url": "https://mcp.ainoflow.io/mcp/v1/files",
       "headers": {
         "Authorization": "Bearer ${AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-storage": {
-      "type": "streamable-http",
       "url": "https://mcp.ainoflow.io/mcp/v1/storage/json",
       "headers": {
         "Authorization": "Bearer ${AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-inbox": {
-      "type": "streamable-http",
       "url": "https://mcp.ainoflow.io/mcp/v1/inbox",
       "headers": {
         "Authorization": "Bearer ${AINOFLOW_API_KEY}"

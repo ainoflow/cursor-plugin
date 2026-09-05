@@ -7,16 +7,19 @@ description: JSON key-value and structured storage via Ainoflow Storage MCP. Use
 
 Use the **ainoflow-storage** MCP server for JSON key-value storage of structured app or agent state.
 
+## Start here
+
+Call this server’s guide tool first (`storage_guide` or whichever `*_guide` tool it exposes). Store valid JSON; follow the categories and keys the guide describes.
+
 ## When to use
 
 - Persist structured state (settings, job records, checkpoints) as JSON
-- Read, update, or delete named keys in a category/namespace
-- Share machine-readable state across sessions
+- Read that state back in a later turn or session
 
-## How to use
+## First task
 
-Call the tools exposed by the `ainoflow-storage` MCP server. Store valid JSON documents; use categories and keys the product already uses when they exist.
+Write a small JSON document (for example `{ "status": "ok" }` under a test key). Read the same key back and confirm the document matches.
 
 Do not write API keys, tokens, or personal secrets into stored JSON.
 
-Auth is the plugin variable `${AINOFLOW_API_KEY}` (Ainoflow Dashboard). See [MCP Protocol](https://www.ainoflow.io/docs/mcp).
+Auth is the Cursor plugin variable `${AINOFLOW_API_KEY}` (Ainoflow Dashboard). See [MCP Protocol](https://www.ainoflow.io/docs/mcp).

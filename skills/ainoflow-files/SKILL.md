@@ -7,16 +7,19 @@ description: File upload, download, and list via Ainoflow Files MCP. Use when wo
 
 Use the **ainoflow-files** MCP server for binary file storage (uploads, downloads, and listings) in Ainoflow.
 
+## Start here
+
+Call this server’s guide tool first (`files_guide` or whichever `*_guide` tool it exposes). Use those tools for upload, download, list, and links rather than pasting file bytes into chat.
+
 ## When to use
 
-- Upload or retrieve user files that should live in Ainoflow, not only on the local disk
-- List files already stored for the current account
-- Hand off documents or attachments between sessions or agents
+- Store a user file in Ainoflow instead of only on the local disk
+- Retrieve a previously uploaded file or a link to it
 
-## How to use
+## First task
 
-Call the tools exposed by the `ainoflow-files` MCP server. Use those tools for upload, download, and list rather than copying file bytes into chat.
+Upload a small non-secret file, then list or fetch it and confirm you can retrieve the same object (or a link the server returns).
 
 Do not commit downloaded credentials or embed API keys in stored files.
 
-Auth is the plugin variable `${AINOFLOW_API_KEY}` (Ainoflow Dashboard). See [MCP Protocol](https://www.ainoflow.io/docs/mcp).
+Auth is the Cursor plugin variable `${AINOFLOW_API_KEY}` (Ainoflow Dashboard). See [MCP Protocol](https://www.ainoflow.io/docs/mcp).
