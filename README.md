@@ -2,7 +2,7 @@
 
 Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.ainoflow.io/docs/mcp) services — **Memory**, **Files**, **Storage**, and **Inbox** — for Cursor (and Grok Bot in Cursor).
 
-This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `mcp.json` + `skills/` + `assets/logo.png`.
+This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`.
 
 Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (Plugins → Configure). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
 
@@ -20,10 +20,16 @@ Publish path for maintainers: [cursor.com/marketplace/publish](https://cursor.co
 
 ## Local test
 
-1. Clone this repo (or symlink the plugin root) into `~/.cursor/plugins/local/ainoflow`.
-2. Set `AINOFLOW_API_KEY` via **Plugins → Configure**. Cursor substitutes `${AINOFLOW_API_KEY}` in `mcp.json`.
-3. Restart Cursor.
-4. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
+Two install paths:
+
+- **Preferred (single plugin):** clone or symlink the plugin root to `~/.cursor/plugins/local/ainoflow`.
+- **Add folder as a marketplace:** choose this repo folder in Cursor. That path requires `.cursor-plugin/marketplace.json` (this repo includes a single-plugin marketplace with `source: "."`).
+
+Then:
+
+1. Set `AINOFLOW_API_KEY` via **Plugins → Configure**. Cursor substitutes `${AINOFLOW_API_KEY}` in `mcp.json`.
+2. Restart Cursor.
+3. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
 
 ## Auth
 
@@ -77,7 +83,8 @@ After the four servers connect, try one verifiable task per service (no secrets 
 
 Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish):
 
-- [ ] `.cursor-plugin/plugin.json` is the primary manifest (`name`: `ainoflow`)
+- [ ] `.cursor-plugin/plugin.json` is the primary plugin manifest (`name`: `ainoflow`)
+- [ ] `.cursor-plugin/marketplace.json` is present for folder / marketplace install (`source: "."`)
 - [ ] `variables` declares required `AINOFLOW_API_KEY`; every `${VAR}` in `mcp.json` is in that schema
 - [ ] `"logo": "assets/logo.png"` is set (official mark from https://www.ainoflow.io/logo.png)
 - [ ] `mcp.json` lists four remote servers with `url` + `Authorization: Bearer ${AINOFLOW_API_KEY}`

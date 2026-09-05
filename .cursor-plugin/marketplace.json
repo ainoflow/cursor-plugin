@@ -1,0 +1,16 @@
+{
+  "name": "ainoflow",
+  "owner": {
+    "name": "Ainoflow"
+  },
+  "metadata": {
+    "description": "Ainoflow Cursor / Grok Bot plugins"
+  },
+  "plugins": [
+    {
+      "name": "ainoflow",
+      "source": ".",
+      "description": "Ainoflow MCP: Memory, Files, Storage, and Inbox"
+    }
+  ]
+}
