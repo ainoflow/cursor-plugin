@@ -20,7 +20,7 @@ Publish path for maintainers: [cursor.com/marketplace/publish](https://cursor.co
 
 ## Local test
 
-1. Clone this repo (or symlink the plugin directory) into `~/.cursor/plugins/local`, or the current Cursor local-plugin path if it differs.
+1. Clone this repo (or symlink the plugin root) into `~/.cursor/plugins/local/ainoflow`.
 2. Set `AINOFLOW_API_KEY` via **Plugins → Configure**. Cursor substitutes `${AINOFLOW_API_KEY}` in `mcp.json`.
 3. Restart Cursor.
 4. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
@@ -71,7 +71,7 @@ After the four servers connect, try one verifiable task per service (no secrets 
 1. **Memory** — Save a short decision (what you chose and why). In a new chat/session, restore that decision from Memory and confirm the text matches.
 2. **Storage** — Write a small JSON document (for example `{ "status": "ok" }`) and read the same key back.
 3. **Files** — Upload a small non-secret file, then retrieve it or obtain a link the Files server returns.
-4. **Inbox** — Read an inbound email or inbox item, handle any attachment if needed, then mark it processed (or delete it if you meant to discard it). This plugin does not send mail.
+4. **Inbox** — List or read an inbound email or inbox item and summarize it. Mark it processed only after completing the requested processing task. A read-only request leaves status unchanged. Delete only when asked. This plugin does not send mail.
 
 ## Publish checklist
 
@@ -87,7 +87,7 @@ Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketp
 - [ ] Local install connects all four MCP servers
 - [ ] Repository link and README are ready for marketplace review
 
-Cursor marketplace listing may later require a public GitHub repository. This repo stays private until there is an explicit greenlight to change visibility. Visibility is not part of the Phase 1 scaffold.
+The public Cursor marketplace requires a **public** GitHub repository (Cursor marketplace docs). This repo stays private until an explicit greenlight to flip visibility as part of the publish checklist. Visibility change is not part of this PR’s merge.
 
 ## Documentation
 
