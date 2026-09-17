@@ -18,7 +18,7 @@ Call this server’s guide tool first (`memory_guide` or whichever `*_guide` too
 
 ## First task
 
-Save a short decision (what was chosen and why) with the server’s write tool. In a later session, find it with search or list, then read it back and confirm the same text.
+Call `memory_guide`, then write a short decision (what was chosen and why). Find it with `memory_search` and `memory_list`, read it back, edit a small clarification, and confirm it via `memory_context`.
 
 Keep entries concise. Do not store API keys, tokens, or other secrets in memory documents.
 

@@ -4,38 +4,82 @@ Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.aino
 
 This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`.
 
-Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (Plugins → Configure). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
+Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (**Plugins → Configure**). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
 
-## Prerequisites
+## Quick start
 
-- An [Ainoflow](https://www.ainoflow.io) account
-- An API key from the Ainoflow Dashboard (Bearer token for all MCP endpoints)
-- Cursor with Plugins / Variables support
+You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the Ainoflow Dashboard. This repo is private; install locally (marketplace publish is later).
 
-## Install from the marketplace
+### 1. Install the plugin locally
 
-Browse plugins at [cursor.com/marketplace](https://cursor.com/marketplace). After this plugin is published, install **ainoflow** and set `AINOFLOW_API_KEY` when Cursor prompts you (**Plugins → Configure** / Variables).
+**Preferred:** clone or copy the plugin root to:
 
-Publish path for maintainers: [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
+- macOS / Linux: `~/.cursor/plugins/local/ainoflow`
+- Windows: `%USERPROFILE%\.cursor\plugins\local\ainoflow`
 
-## Local test
+A symlink at that path works only if it resolves to a directory **inside** `~/.cursor/plugins/local`. Cursor skips a symlink that points to a plugin repository elsewhere on disk — clone or copy into the folder above when in doubt.
 
-Two install paths:
+**Or** add this repo folder as a marketplace in Cursor. That path uses `.cursor-plugin/marketplace.json` (single-plugin marketplace with `"source": "."`).
 
-- **Preferred (single plugin):** clone or symlink the plugin root to `~/.cursor/plugins/local/ainoflow`.
-- **Add folder as a marketplace:** choose this repo folder in Cursor. That path requires `.cursor-plugin/marketplace.json` (this repo includes a single-plugin marketplace with `source: "."`).
+### 2. Set `AINOFLOW_API_KEY`
 
-Then:
+1. Open **Plugins → ainoflow → Configure**.
+2. Paste the Dashboard API key only (raw key). Do **not** type a `Bearer ` prefix — that becomes `Bearer Bearer …` and returns HTTP 401.
+3. Restart Cursor, or run **Developer: Reload Window**.
+4. Confirm four green MCP servers: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
 
-1. Set `AINOFLOW_API_KEY` via **Plugins → Configure**. Cursor substitutes `${AINOFLOW_API_KEY}` in `mcp.json`.
-2. Restart Cursor.
-3. Confirm the four MCP servers connect: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
+If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Variables did not substitute. For a local smoke-test only:
 
-If all four `ainoflow-*` servers fail or Cursor shows OAuth, see [Troubleshooting: 401 and Cursor OAuth](#troubleshooting-401-and-cursor-oauth). The plugin endpoints and `mcp.json` format are correct; a rejected or empty API key is the usual cause.
+1. Set the OS environment variable `AINOFLOW_API_KEY` to the same raw Dashboard key (no `Bearer ` prefix).
+2. Add the four servers to `~/.cursor/mcp.json` (Windows: `%USERPROFILE%\.cursor\mcp.json`) using `Authorization: Bearer ${env:AINOFLOW_API_KEY}`:
+
+```json
+{
+  "mcpServers": {
+    "ainoflow-memory": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/memory",
+      "headers": {
+        "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-files": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/files",
+      "headers": {
+        "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-storage": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/storage/json",
+      "headers": {
+        "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-inbox": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/inbox",
+      "headers": {
+        "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}`. Do not switch the plugin file to `${env:...}` only. Never commit a filled-in user `mcp.json` or a real key.
+
+If all four `ainoflow-*` servers fail or Cursor shows OAuth, see [Troubleshooting: 401 and Cursor OAuth](#troubleshooting-401-and-cursor-oauth).
+
+### 3. First tasks
+
+After the four servers connect, run one verifiable task per service (no secrets in the content):
+
+1. **Memory** — Call `memory_guide`, write a short decision (what you chose and why), then `memory_search` → `memory_list` → `memory_read` → `memory_edit` → `memory_context` and confirm the same text.
+2. **Storage** — Call `storage_guide`, write a small JSON document (for example `{ "status": "ok" }`), and read the same key back.
+3. **Files** — Call `files_guide`, upload a small non-secret file, then retrieve it or obtain a link the Files server returns.
+4. **Inbox** — Call `inbox_guide`, list or read an inbound email or inbox item, and summarize it. Mark it processed only after completing the requested processing task. A read-only request leaves status unchanged. Delete only when asked. This plugin does not send mail.
 
 ## Auth
 
-Phase 1 auth is **Cursor Variables only**.
+Phase 1 auth is **Cursor Variables** via **Plugins → Configure**, with an OS env + user `mcp.json` fallback when local Variables stay literal.
 
 All four servers use remote Streamable HTTP (JSON-RPC 2.0) and the same header, with the Cursor variable placeholder:
 
@@ -84,7 +128,7 @@ Expect a JSON-RPC `initialize` result, not HTTP 401.
 
 **Placeholders vs Variables**
 
-Marketplace install substitutes `${AINOFLOW_API_KEY}` from Plugins → Configure. If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, Variables were not applied (common on some local folder / local marketplace installs). For a local smoke-test only, set the OS env `AINOFLOW_API_KEY` and put the four URLs in `~/.cursor/mcp.json` (Windows: `%USERPROFILE%\.cursor\mcp.json`) with `Authorization: Bearer ${env:AINOFLOW_API_KEY}`. The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}` — do not switch it to `${env:...}` only.
+Marketplace / plugin-variable install substitutes `${AINOFLOW_API_KEY}` from Plugins → Configure. If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, Variables were not applied (common on some local folder / local marketplace installs). Use the Quick start OS env + user `mcp.json` fallback (`Bearer ${env:AINOFLOW_API_KEY}`). The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}`.
 
 Never commit real keys, tokens, or a filled-in `mcp.json`.
 
@@ -110,16 +154,13 @@ Transport: Streamable HTTP, JSON-RPC 2.0. Docs: [www.ainoflow.io/docs/mcp](https
 
 Each skill starts with that server’s guide tool. Recipes stay generic; the live tool list comes from the connected server.
 
-## First tasks
+## Marketplace (later)
 
-After the four servers connect, try one verifiable task per service (no secrets in the content):
+Browse plugins at [cursor.com/marketplace](https://cursor.com/marketplace). After this plugin is published, install **ainoflow** and set `AINOFLOW_API_KEY` when Cursor prompts you (**Plugins → Configure** / Variables).
 
-1. **Memory** — Save a short decision (what you chose and why). In a new chat/session, restore that decision from Memory and confirm the text matches.
-2. **Storage** — Write a small JSON document (for example `{ "status": "ok" }`) and read the same key back.
-3. **Files** — Upload a small non-secret file, then retrieve it or obtain a link the Files server returns.
-4. **Inbox** — List or read an inbound email or inbox item and summarize it. Mark it processed only after completing the requested processing task. A read-only request leaves status unchanged. Delete only when asked. This plugin does not send mail.
+Publish path for maintainers: [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
 
-## Publish checklist
+### Publish checklist
 
 Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish):
 

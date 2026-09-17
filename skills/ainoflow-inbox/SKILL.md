@@ -22,7 +22,7 @@ Call this server’s guide tool first (`inbox_guide` or whichever `*_guide` tool
 
 ## First task
 
-List or read an inbound item and summarize it for the user.
+Call `inbox_guide`, then list or read an inbound item and summarize it for the user.
 Mark it processed only after completing the requested processing task.
 A read-only request leaves its status unchanged.
 Delete only when the user asks.

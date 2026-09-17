@@ -18,7 +18,7 @@ Call this server’s guide tool first (`storage_guide` or whichever `*_guide` to
 
 ## First task
 
-Write a small JSON document (for example `{ "status": "ok" }` under a test key). Read the same key back and confirm the document matches.
+Call `storage_guide`, write a small JSON document (for example `{ "status": "ok" }` under a test key), then read the same key back and confirm the document matches.
 
 Do not write API keys, tokens, or personal secrets into stored JSON.
 

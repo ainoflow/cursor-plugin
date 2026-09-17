@@ -18,7 +18,7 @@ Call this server’s guide tool first (`files_guide` or whichever `*_guide` tool
 
 ## First task
 
-Upload a small non-secret file, then list or fetch it and confirm you can retrieve the same object (or a link the server returns).
+Call `files_guide`, upload a small non-secret file, then list or fetch it and confirm you can retrieve the same object (or a link the server returns).
 
 Do not commit downloaded credentials or embed API keys in stored files.
 
