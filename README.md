@@ -1,6 +1,6 @@
 # Ainoflow Cursor plugin
 
-Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.ainoflow.io/docs/mcp) services — **Memory**, **Files**, **Storage**, and **Inbox** — for Cursor (and Grok Bot in Cursor).
+The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows.
 
 This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`.
 
