@@ -8,7 +8,7 @@ Agent Plugins portability (stdio transports, portable HTTP header expansion) is 
 
 ## Quick start
 
-You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the Ainoflow Dashboard. This repo is private; install locally (marketplace publish is later).
+You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the Ainoflow Dashboard. This repo stays private until an explicit post-merge greenlight. Install locally for now; marketplace publish follows the [Marketplace publish runbook](#marketplace-publish-runbook).
 
 ### 1. Install the plugin locally
 
@@ -154,28 +154,63 @@ Transport: Streamable HTTP, JSON-RPC 2.0. Docs: [www.ainoflow.io/docs/mcp](https
 
 Each skill starts with that server’s guide tool. Recipes stay generic; the live tool list comes from the connected server.
 
-## Marketplace (later)
+## Marketplace publish runbook
 
-Browse plugins at [cursor.com/marketplace](https://cursor.com/marketplace). After this plugin is published, install **ainoflow** and set `AINOFLOW_API_KEY` when Cursor prompts you (**Plugins → Configure** / Variables).
+Maintainer dogfood path for the Cursor Marketplace. Do not merge until QA **PASS**. Do not flip GitHub visibility or submit until the later gates are green. Visibility change is never automatic.
 
-Publish path for maintainers: [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish).
+After listing, users install **ainoflow** from [cursor.com/marketplace](https://cursor.com/marketplace) and set `AINOFLOW_API_KEY` under **Plugins → Configure**.
 
-### Publish checklist
+### 1. QA PASS, then Product Owner merge
 
-Before submitting at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish):
+- [ ] QA records **PASS** on the local [Quick start](#quick-start) (four green MCP servers + First tasks)
+- [ ] Product Owner merges this PR into `main`
+- [ ] Repository stays **private** through merge. Do not change GitHub visibility in the merge.
 
-- [ ] `.cursor-plugin/plugin.json` is the primary plugin manifest (`name`: `ainoflow`)
-- [ ] `.cursor-plugin/marketplace.json` is present for folder / marketplace install (`source: "."`)
-- [ ] `variables` declares required `AINOFLOW_API_KEY`; every `${VAR}` in `mcp.json` is in that schema
-- [ ] `"logo": "assets/logo.png"` is set (official mark from https://www.ainoflow.io/logo.png)
+### 2. Pre-public leak audit
+
+Run on merged `main` (and any tag you will publish) **before** anyone changes GitHub visibility:
+
+- [ ] No API keys, tokens, `.env` files, dashboard dumps, or customer data
+- [ ] No internal specs, private runbooks, or staff-only docs
+- [ ] No links to `ainoflow-core` or other private repositories
+- [ ] Docs and skills link only to public MCP docs: [www.ainoflow.io/docs/mcp](https://www.ainoflow.io/docs/mcp)
+- [ ] Committed `mcp.json` still uses `Bearer ${AINOFLOW_API_KEY}` only (placeholder, not a real key)
+- [ ] Git history on the default branch has the same constraints (no leaked secrets in old commits)
+
+### 3. Flip the GitHub repo to public (explicit greenlight)
+
+The Cursor public marketplace requires a **public** GitHub repository. This is a separate Product Owner / security greenlight — **not** implied by merge.
+
+- [ ] Leak audit PASS
+- [ ] Named owner explicitly greenlights making `ainoflow/cursor-plugin` public
+- [ ] Change GitHub visibility to public
+- [ ] Confirm [github.com/ainoflow/cursor-plugin](https://github.com/ainoflow/cursor-plugin) is reachable without auth
+
+### 4. Submit to Cursor Marketplace
+
+- [ ] Open [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish)
+- [ ] Submit repository URL: `https://github.com/ainoflow/cursor-plugin`
+- [ ] Wait for Cursor review
+
+### 5. Cursor official submission checklist
+
+From the [Plugins reference](https://cursor.com/docs/reference/plugins) submission checklist:
+
+- [ ] Valid `.cursor-plugin/plugin.json` (`name`: `ainoflow`, lowercase kebab-case, unique)
+- [ ] `description` explains Memory, Files, Storage, and Inbox
+- [ ] `README.md` documents install, Variables, and configuration
+- [ ] Logo committed and referenced (`"logo": "assets/logo.png"`, official mark from https://www.ainoflow.io/logo.png)
+- [ ] Every `${VAR}` in `mcp.json` is declared in `plugin.json` `variables` (`AINOFLOW_API_KEY`)
+- [ ] All included components have valid files and frontmatter (four `skills/*/SKILL.md`)
+- [ ] All manifest paths are relative and valid (no `..`, no absolute paths)
+- [ ] Plugin tested locally (Quick start)
+- [ ] GitHub repository is **public** (only after step 3)
+
+Also keep for this package:
+
+- [ ] `.cursor-plugin/marketplace.json` present for folder / marketplace install (`source: "."`)
 - [ ] `mcp.json` lists four remote servers with `url` + `Authorization: Bearer ${AINOFLOW_API_KEY}`
-- [ ] Four skills exist under `skills/*/SKILL.md` with name + when-to-use description
 - [ ] Inbox skill and README do not claim outbound send
-- [ ] No API keys, tokens, `.env` files, or customer data in git
-- [ ] Local install connects all four MCP servers
-- [ ] Repository link and README are ready for marketplace review
-
-The public Cursor marketplace requires a **public** GitHub repository (Cursor marketplace docs). This repo stays private until an explicit greenlight to flip visibility as part of the publish checklist. Visibility change is not part of this PR’s merge.
 
 ## Documentation
 
