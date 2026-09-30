@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "ainoflow-memory": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/memory",
+      "headers": {
+        "Authorization": "Bearer ${AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-files": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/files",
+      "headers": {
+        "Authorization": "Bearer ${AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-storage": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/storage/json",
+      "headers": {
+        "Authorization": "Bearer ${AINOFLOW_API_KEY}"
+      }
+    },
+    "ainoflow-inbox": {
+      "url": "https://mcp.ainoflow.io/mcp/v1/inbox",
+      "headers": {
+        "Authorization": "Bearer ${AINOFLOW_API_KEY}"
+      }
+    }
+  }
+}
