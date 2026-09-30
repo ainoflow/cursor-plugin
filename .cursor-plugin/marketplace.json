@@ -4,13 +4,13 @@
     "name": "Ainoflow"
   },
   "metadata": {
-    "description": "Ainoflow Cursor / Grok Bot plugins"
+    "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows."
   },
   "plugins": [
     {
       "name": "ainoflow",
       "source": ".",
-      "description": "Ainoflow MCP: Memory, Files, Storage, and Inbox"
+      "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows."
     }
   ]
 }

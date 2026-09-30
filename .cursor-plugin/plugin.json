@@ -1,7 +1,7 @@
 {
   "name": "ainoflow",
   "version": "0.1.0",
-  "description": "Ainoflow MCP: Memory, Files, Storage, and Inbox for Cursor / Grok Bot agents",
+  "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows.",
   "author": {
     "name": "Ainoflow"
   },
