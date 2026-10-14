@@ -1,5 +1,6 @@
 {
   "name": "ainoflow",
+  "displayName": "Ainoflow",
   "version": "0.1.0",
   "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows.",
   "author": {
