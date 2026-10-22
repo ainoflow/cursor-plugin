@@ -4,7 +4,7 @@ The shared memory and data layer for AI agents. Give your agents persistent memo
 
 Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.ainoflow.io/docs/mcp) services - **Memory**, **Files**, **Storage**, and **Inbox** - for Cursor (and Grok Bot in Cursor).
 
-This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`. The manifest pins `"mcpServers": "./mcp.json"` and each server sets `"type": "http"`, matching official Cursor HTTP MCP plugins. The catalog logo is the public URL `https://www.ainoflow.io/logo.png` (the PNG remains committed for local use).
+This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`. The manifest pins `"mcpServers": "./mcp.json"` and each server sets `"type": "http"`, matching official Cursor HTTP MCP plugins. The catalog logo is the public URL of the repo's 512x512 `assets/logo.png` (`https://raw.githubusercontent.com/ainoflow/cursor-plugin/main/assets/logo.png`).
 
 Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (**Plugins → Configure**). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
 
@@ -209,7 +209,7 @@ From the [Plugins reference](https://cursor.com/docs/reference/plugins) submissi
 - [ ] Valid `.cursor-plugin/plugin.json` (`name`: `ainoflow`, lowercase kebab-case, unique)
 - [ ] `description` is a one-line card blurb covering Memory, Files, Storage, and Inbox (`displayName`, `publisher`, `homepage`, `repository`, `category` set in `plugin.json`)
 - [ ] `README.md` documents install, Variables, and configuration
-- [ ] Logo committed (`assets/logo.png`) and referenced as the public URL (`"logo": "https://www.ainoflow.io/logo.png"`)
+- [ ] Logo committed (`assets/logo.png`) and referenced as the public URL (`"logo": "https://raw.githubusercontent.com/ainoflow/cursor-plugin/main/assets/logo.png"`)
 - [ ] Every `${VAR}` in `mcp.json` is declared in `plugin.json` `variables` (`AINOFLOW_API_KEY`)
 - [ ] All included components have valid files and frontmatter (four `skills/*/SKILL.md`)
 - [ ] Manifest component paths are relative and valid (no `..`); `logo` may be an absolute URL per the plugin schema
