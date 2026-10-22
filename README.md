@@ -28,7 +28,7 @@ A symlink at that path works only if it resolves to a directory **inside** `~/.c
 1. Open **Plugins → ainoflow → Configure**.
 2. Paste the Dashboard API key only (raw key). Do **not** type a `Bearer ` prefix — that becomes `Bearer Bearer …` and returns HTTP 401.
 3. Restart Cursor, or run **Developer: Reload Window**.
-4. Confirm four green MCP servers: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
+4. Confirm four green **plugin** MCP servers: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox` (client id prefix `plugin-`, not `user-`).
 
 If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Variables did not substitute. For a local smoke-test only:
 
@@ -71,6 +71,8 @@ If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Var
 ```
 
 The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}`. Do not switch the plugin file to `${env:...}` only. Never commit a filled-in user `mcp.json` or a real key.
+
+Those user `mcp.json` keys match the plugin. Cursor ids them as `user-<name>` (plugin rows are `plugin-<plugin>-<name>`). User vs project configs with the same key merge or duplicate ([MCP integrations](https://cursor.com/help/customization/mcp)); they do **not** register the plugin connectors. When dogfooding the plugin, disable or remove `user-ainoflow-*` so the four `plugin=` rows are visible. Keep the plugin server names: they match [public MCP config](https://www.ainoflow.io/docs/mcp) and the skill titles.
 
 If all four `ainoflow-*` servers fail or Cursor shows OAuth, see [Troubleshooting: 401 and Cursor OAuth](#troubleshooting-401-and-cursor-oauth).
 
@@ -166,7 +168,7 @@ Maintainer dogfood path for the Cursor Marketplace. Do not merge until QA **PASS
 
 After listing, users install **ainoflow** from [cursor.com/marketplace](https://cursor.com/marketplace) and set `AINOFLOW_API_KEY` under **Plugins → Configure**.
 
-Team marketplace dogfood: after this repo changes, an admin must click **Refresh** (or enable **Auto Refresh**) under **Dashboard → Plugins & MCPs** so the catalog re-indexes. Then uninstall and reinstall the plugin, set the API key, and reload MCP. See [Keep plugins up to date](https://cursor.com/docs/plugins).
+Team marketplace dogfood: after this repo changes, an admin must click **Refresh** (or enable **Auto Refresh**) under **Dashboard → Plugins & MCPs** so the catalog re-indexes. Then uninstall and reinstall the plugin, set the API key, disable any `user-ainoflow-*` fallback servers, and reload MCP. See [Keep plugins up to date](https://cursor.com/docs/plugins).
 
 ### 1. QA PASS, then Product Owner merge
 
