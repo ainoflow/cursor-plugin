@@ -10,7 +10,7 @@ Agent Plugins portability (stdio transports, portable HTTP header expansion) is 
 
 ## Quick start
 
-You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the Ainoflow Dashboard. This repo stays private until an explicit post-merge greenlight. Install locally for now; marketplace publish follows the [Marketplace publish runbook](#marketplace-publish-runbook).
+You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the Ainoflow Dashboard. Install from the Cursor Marketplace once listed, or install locally for testing (below). Publishing steps are in the [Marketplace publish runbook](#marketplace-publish-runbook).
 
 ### 1. Install the plugin locally
 
