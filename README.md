@@ -4,7 +4,7 @@ The shared memory and data layer for AI agents. Give your agents persistent memo
 
 Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.ainoflow.io/docs/mcp) services - **Memory**, **Files**, **Storage**, and **Inbox** - for Cursor (and Grok Bot in Cursor).
 
-This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`.
+This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`. The manifest pins `"mcpServers": "./mcp.json"` and each server sets `"type": "http"`, matching official Cursor HTTP MCP plugins. The catalog logo is the public URL `https://www.ainoflow.io/logo.png` (the PNG remains committed for local use).
 
 Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (**Plugins → Configure**). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
 
@@ -39,24 +39,28 @@ If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Var
 {
   "mcpServers": {
     "ainoflow-memory": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/memory",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-files": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/files",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-storage": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/storage/json",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-inbox": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/inbox",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
@@ -162,6 +166,8 @@ Maintainer dogfood path for the Cursor Marketplace. Do not merge until QA **PASS
 
 After listing, users install **ainoflow** from [cursor.com/marketplace](https://cursor.com/marketplace) and set `AINOFLOW_API_KEY` under **Plugins → Configure**.
 
+Team marketplace dogfood: after this repo changes, an admin must click **Refresh** (or enable **Auto Refresh**) under **Dashboard → Plugins & MCPs** so the catalog re-indexes. Then uninstall and reinstall the plugin, set the API key, and reload MCP. See [Keep plugins up to date](https://cursor.com/docs/plugins).
+
 ### 1. QA PASS, then Product Owner merge
 
 - [ ] QA records **PASS** on the local [Quick start](#quick-start) (four green MCP servers + First tasks)
@@ -201,17 +207,18 @@ From the [Plugins reference](https://cursor.com/docs/reference/plugins) submissi
 - [ ] Valid `.cursor-plugin/plugin.json` (`name`: `ainoflow`, lowercase kebab-case, unique)
 - [ ] `description` explains Memory, Files, Storage, and Inbox
 - [ ] `README.md` documents install, Variables, and configuration
-- [ ] Logo committed and referenced (`"logo": "assets/logo.png"`, official mark from https://www.ainoflow.io/logo.png)
+- [ ] Logo committed (`assets/logo.png`) and referenced as the public URL (`"logo": "https://www.ainoflow.io/logo.png"`)
 - [ ] Every `${VAR}` in `mcp.json` is declared in `plugin.json` `variables` (`AINOFLOW_API_KEY`)
 - [ ] All included components have valid files and frontmatter (four `skills/*/SKILL.md`)
-- [ ] All manifest paths are relative and valid (no `..`, no absolute paths)
+- [ ] Manifest component paths are relative and valid (no `..`); `logo` may be an absolute URL per the plugin schema
 - [ ] Plugin tested locally (Quick start)
 - [ ] GitHub repository is **public** (only after step 3)
 
 Also keep for this package:
 
 - [ ] `.cursor-plugin/marketplace.json` present for folder / marketplace install (`source: "."`)
-- [ ] `mcp.json` lists four remote servers with `url` + `Authorization: Bearer ${AINOFLOW_API_KEY}`
+- [ ] `plugin.json` pins `"mcpServers": "./mcp.json"`
+- [ ] `mcp.json` lists four remote servers with `"type": "http"`, `url`, and `Authorization: Bearer ${AINOFLOW_API_KEY}`
 - [ ] Inbox skill and README do not claim outbound send
 
 ## Documentation
