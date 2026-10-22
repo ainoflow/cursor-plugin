@@ -13,7 +13,7 @@
   "keywords": ["ainoflow", "mcp", "memory", "files", "storage", "inbox"],
   "category": "integrations",
   "tags": ["ainoflow", "memory", "files", "storage", "inbox", "mcp"],
-  "logo": "https://raw.githubusercontent.com/ainoflow/cursor-plugin/main/assets/logo.png",
+  "logo": "https://www.ainoflow.io/plugin.png",
   "mcpServers": "./mcp.json",
   "variables": {
     "type": "object",
