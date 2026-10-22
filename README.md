@@ -207,7 +207,7 @@ The Cursor public marketplace requires a **public** GitHub repository. This is a
 From the [Plugins reference](https://cursor.com/docs/reference/plugins) submission checklist:
 
 - [ ] Valid `.cursor-plugin/plugin.json` (`name`: `ainoflow`, lowercase kebab-case, unique)
-- [ ] `description` explains Memory, Files, Storage, and Inbox
+- [ ] `description` is a one-line card blurb covering Memory, Files, Storage, and Inbox (`displayName`, `publisher`, `homepage`, `repository`, `category` set in `plugin.json`)
 - [ ] `README.md` documents install, Variables, and configuration
 - [ ] Logo committed (`assets/logo.png`) and referenced as the public URL (`"logo": "https://www.ainoflow.io/logo.png"`)
 - [ ] Every `${VAR}` in `mcp.json` is declared in `plugin.json` `variables` (`AINOFLOW_API_KEY`)
