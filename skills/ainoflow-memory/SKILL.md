@@ -9,7 +9,7 @@ Use the **ainoflow-memory** MCP server for durable memory: markdown documents wi
 
 ## Start here
 
-Call this server’s guide tool first (`memory_guide` or whichever `*_guide` tool it exposes). Use that contract — do not invent endpoints or local files for long-lived memory.
+Call this server’s guide tool first (`memory_guide` or whichever `*_guide` tool it exposes). Use that contract - do not invent endpoints or local files for long-lived memory.
 
 ## When to use
 
