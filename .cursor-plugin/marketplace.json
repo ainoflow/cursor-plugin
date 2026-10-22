@@ -10,7 +10,7 @@
     {
       "name": "ainoflow",
       "source": ".",
-      "description": "Persistent memory, files, storage, and inbox for agents."
+      "description": "Shared memory, files, storage, and inbox for AI agents."
     }
   ]
 }

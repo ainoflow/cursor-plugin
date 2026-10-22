@@ -2,10 +2,7 @@
   "name": "ainoflow",
   "displayName": "Ainoflow",
   "version": "0.1.1",
-  "minClientVersions": {
-    "cursor": "3.13.0"
-  },
-  "description": "Persistent memory, files, storage, and inbox for agents.",
+  "description": "Shared memory, files, storage, and inbox for AI agents.",
   "author": {
     "name": "Ainoflow"
   },
