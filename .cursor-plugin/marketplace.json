@@ -10,7 +10,7 @@
     {
       "name": "ainoflow",
       "source": ".",
-      "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows."
+      "description": "Shared memory, files, storage, and inbox for AI agents."
     }
   ]
 }

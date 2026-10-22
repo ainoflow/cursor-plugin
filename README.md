@@ -4,7 +4,7 @@ The shared memory and data layer for AI agents. Give your agents persistent memo
 
 Phase 1 **Cursor Plugin** that wires four remote [Ainoflow MCP](https://www.ainoflow.io/docs/mcp) services - **Memory**, **Files**, **Storage**, and **Inbox** - for Cursor (and Grok Bot in Cursor).
 
-This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`.
+This repository is a Cursor Plugin root: `.cursor-plugin/plugin.json` + `.cursor-plugin/marketplace.json` + `mcp.json` + `skills/` + `assets/logo.png`. The manifest pins `"mcpServers": "./mcp.json"` and each server sets `"type": "http"`, matching official Cursor HTTP MCP plugins. The catalog logo is the public URL `https://www.ainoflow.io/logo.png` (the PNG remains committed for local use).
 
 Agent Plugins portability (stdio transports, portable HTTP header expansion) is **out of scope for v1**. `${AINOFLOW_API_KEY}` is a Cursor Plugin Variable. It is substituted by Cursor (**Plugins → Configure**). Do not expect Bearer placeholders to work in a pure Agent Plugins client.
 
@@ -19,16 +19,16 @@ You need an [Ainoflow](https://www.ainoflow.io) account and an API key from the 
 - macOS / Linux: `~/.cursor/plugins/local/ainoflow`
 - Windows: `%USERPROFILE%\.cursor\plugins\local\ainoflow`
 
-A symlink at that path works only if it resolves to a directory **inside** `~/.cursor/plugins/local`. Cursor skips a symlink that points to a plugin repository elsewhere on disk — clone or copy into the folder above when in doubt.
+A symlink at that path works only if it resolves to a directory **inside** `~/.cursor/plugins/local`. Cursor skips a symlink that points to a plugin repository elsewhere on disk - clone or copy into the folder above when in doubt.
 
 **Or** add this repo folder as a marketplace in Cursor. That path uses `.cursor-plugin/marketplace.json` (single-plugin marketplace with `"source": "."`).
 
 ### 2. Set `AINOFLOW_API_KEY`
 
 1. Open **Plugins → ainoflow → Configure**.
-2. Paste the Dashboard API key only (raw key). Do **not** type a `Bearer ` prefix — that becomes `Bearer Bearer …` and returns HTTP 401.
+2. Paste the Dashboard API key only (raw key). Do **not** type a `Bearer ` prefix - that becomes `Bearer Bearer …` and returns HTTP 401.
 3. Restart Cursor, or run **Developer: Reload Window**.
-4. Confirm four green MCP servers: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox`.
+4. Confirm four green **plugin** MCP servers: `ainoflow-memory`, `ainoflow-files`, `ainoflow-storage`, `ainoflow-inbox` (client id prefix `plugin-`, not `user-`).
 
 If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Variables did not substitute. For a local smoke-test only:
 
@@ -39,24 +39,28 @@ If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Var
 {
   "mcpServers": {
     "ainoflow-memory": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/memory",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-files": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/files",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-storage": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/storage/json",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
       }
     },
     "ainoflow-inbox": {
+      "type": "http",
       "url": "https://mcp.ainoflow.io/mcp/v1/inbox",
       "headers": {
         "Authorization": "Bearer ${env:AINOFLOW_API_KEY}"
@@ -68,16 +72,18 @@ If MCP Logs show the literal `${AINOFLOW_API_KEY}` instead of a token, local Var
 
 The committed plugin `mcp.json` stays `Bearer ${AINOFLOW_API_KEY}`. Do not switch the plugin file to `${env:...}` only. Never commit a filled-in user `mcp.json` or a real key.
 
+Those user `mcp.json` keys match the plugin. Cursor ids them as `user-<name>` (plugin rows are `plugin-<plugin>-<name>`). User vs project configs with the same key merge or duplicate ([MCP integrations](https://cursor.com/help/customization/mcp)); they do **not** register the plugin connectors. When dogfooding the plugin, disable or remove `user-ainoflow-*` so the four `plugin-` rows are visible. Keep the plugin server names: they match [public MCP config](https://www.ainoflow.io/docs/mcp) and the skill titles.
+
 If all four `ainoflow-*` servers fail or Cursor shows OAuth, see [Troubleshooting: 401 and Cursor OAuth](#troubleshooting-401-and-cursor-oauth).
 
 ### 3. First tasks
 
 After the four servers connect, run one verifiable task per service (no secrets in the content):
 
-1. **Memory** — Call `memory_guide`, write a short decision (what you chose and why), then `memory_search` → `memory_list` → `memory_read` → `memory_edit` → `memory_context` and confirm the same text.
-2. **Storage** — Call `storage_guide`, write a small JSON document (for example `{ "status": "ok" }`), and read the same key back.
-3. **Files** — Call `files_guide`, upload a small non-secret file, then retrieve it or obtain a link the Files server returns.
-4. **Inbox** — Call `inbox_guide`, list or read an inbound email or inbox item, and summarize it. Mark it processed only after completing the requested processing task. A read-only request leaves status unchanged. Delete only when asked. This plugin does not send mail.
+1. **Memory** - Call `memory_guide`, write a short decision (what you chose and why), then `memory_search` → `memory_list` → `memory_read` → `memory_edit` → `memory_context` and confirm the same text.
+2. **Storage** - Call `storage_guide`, write a small JSON document (for example `{ "status": "ok" }`), and read the same key back.
+3. **Files** - Call `files_guide`, upload a small non-secret file, then retrieve it or obtain a link the Files server returns.
+4. **Inbox** - Call `inbox_guide`, list or read an inbound email or inbox item, and summarize it. Mark it processed only after completing the requested processing task. A read-only request leaves status unchanged. Delete only when asked. This plugin does not send mail.
 
 ## Auth
 
@@ -105,7 +111,7 @@ Cursor **Output → MCP Logs** typically shows:
 - `OAuth fallback failed after MCP server returned 401 for configured Authorization header`
 - `HTTP 401 Unauthorized … while using configured Authorization header`
 
-The plugin sends the Dashboard API key from **Plugins → Configure**, not OAuth. Cursor’s `mcp_auth` / OAuth UI is useless here — Ainoflow does not offer OAuth for Memory, Files, Storage, or Inbox. Do **not** add an OAuth `auth` block to this plugin’s `mcp.json`.
+The plugin sends the Dashboard API key from **Plugins → Configure**, not OAuth. Cursor’s `mcp_auth` / OAuth UI is useless here - Ainoflow does not offer OAuth for Memory, Files, Storage, or Inbox. Do **not** add an OAuth `auth` block to this plugin’s `mcp.json`.
 
 **Fix a first install (empty or wrong key)**
 
@@ -162,6 +168,8 @@ Maintainer dogfood path for the Cursor Marketplace. Do not merge until QA **PASS
 
 After listing, users install **ainoflow** from [cursor.com/marketplace](https://cursor.com/marketplace) and set `AINOFLOW_API_KEY` under **Plugins → Configure**.
 
+Team marketplace dogfood: after this repo changes, an admin must click **Refresh** (or enable **Auto Refresh**) under **Dashboard → Plugins & MCPs** so the catalog re-indexes. Then uninstall and reinstall the plugin, set the API key, disable any `user-ainoflow-*` fallback servers, and reload MCP. See [Keep plugins up to date](https://cursor.com/docs/plugins).
+
 ### 1. QA PASS, then Product Owner merge
 
 - [ ] QA records **PASS** on the local [Quick start](#quick-start) (four green MCP servers + First tasks)
@@ -181,7 +189,7 @@ Run on merged `main` (and any tag you will publish) **before** anyone changes Gi
 
 ### 3. Flip the GitHub repo to public (explicit greenlight)
 
-The Cursor public marketplace requires a **public** GitHub repository. This is a separate Product Owner / security greenlight — **not** implied by merge.
+The Cursor public marketplace requires a **public** GitHub repository. This is a separate Product Owner / security greenlight - **not** implied by merge.
 
 - [ ] Leak audit PASS
 - [ ] Named owner explicitly greenlights making `ainoflow/cursor-plugin` public
@@ -199,19 +207,20 @@ The Cursor public marketplace requires a **public** GitHub repository. This is a
 From the [Plugins reference](https://cursor.com/docs/reference/plugins) submission checklist:
 
 - [ ] Valid `.cursor-plugin/plugin.json` (`name`: `ainoflow`, lowercase kebab-case, unique)
-- [ ] `description` explains Memory, Files, Storage, and Inbox
+- [ ] `description` is a one-line card blurb covering Memory, Files, Storage, and Inbox (`displayName`, `publisher`, `homepage`, `repository`, `category` set in `plugin.json`)
 - [ ] `README.md` documents install, Variables, and configuration
-- [ ] Logo committed and referenced (`"logo": "assets/logo.png"`, official mark from https://www.ainoflow.io/logo.png)
+- [ ] Logo committed (`assets/logo.png`) and referenced as the public URL (`"logo": "https://www.ainoflow.io/logo.png"`)
 - [ ] Every `${VAR}` in `mcp.json` is declared in `plugin.json` `variables` (`AINOFLOW_API_KEY`)
 - [ ] All included components have valid files and frontmatter (four `skills/*/SKILL.md`)
-- [ ] All manifest paths are relative and valid (no `..`, no absolute paths)
+- [ ] Manifest component paths are relative and valid (no `..`); `logo` may be an absolute URL per the plugin schema
 - [ ] Plugin tested locally (Quick start)
 - [ ] GitHub repository is **public** (only after step 3)
 
 Also keep for this package:
 
 - [ ] `.cursor-plugin/marketplace.json` present for folder / marketplace install (`source: "."`)
-- [ ] `mcp.json` lists four remote servers with `url` + `Authorization: Bearer ${AINOFLOW_API_KEY}`
+- [ ] `plugin.json` pins `"mcpServers": "./mcp.json"`
+- [ ] `mcp.json` lists four remote servers with `"type": "http"`, `url`, and `Authorization: Bearer ${AINOFLOW_API_KEY}`
 - [ ] Inbox skill and README do not claim outbound send
 
 ## Documentation

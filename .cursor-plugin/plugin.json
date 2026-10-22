@@ -1,16 +1,20 @@
 {
   "name": "ainoflow",
   "displayName": "Ainoflow",
-  "version": "0.1.0",
-  "description": "The shared memory and data layer for AI agents. Give your agents persistent memory, files, structured state, and real-world context that survives across sessions, tools, and workflows.",
+  "version": "0.1.1",
+  "description": "Shared memory, files, storage, and inbox for AI agents.",
   "author": {
     "name": "Ainoflow"
   },
-  "homepage": "https://www.ainoflow.io/docs/mcp",
+  "publisher": "Ainoflow",
+  "homepage": "https://www.ainoflow.io",
   "repository": "https://github.com/ainoflow/cursor-plugin",
   "license": "MIT",
   "keywords": ["ainoflow", "mcp", "memory", "files", "storage", "inbox"],
-  "logo": "assets/logo.png",
+  "category": "integrations",
+  "tags": ["ainoflow", "memory", "files", "storage", "inbox", "mcp"],
+  "logo": "https://raw.githubusercontent.com/ainoflow/cursor-plugin/main/assets/logo.png",
+  "mcpServers": "./mcp.json",
   "variables": {
     "type": "object",
     "properties": {
